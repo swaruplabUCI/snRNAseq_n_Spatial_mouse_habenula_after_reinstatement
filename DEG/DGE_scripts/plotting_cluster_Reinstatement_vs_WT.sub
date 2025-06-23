@@ -1,0 +1,70 @@
+#!/bin/bash
+#SBATCH --job-name=DEG_plot
+#SBATCH -p standard
+#SBATCH -A mblurton_lab
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --error=slurm-%J.err
+#SBATCH --mem 64G
+#SBATCH --time=4:00:00
+
+source ~/.bashrc
+conda activate cicero
+
+name="celltype_Nurr2c_vs_GFP"
+infile='/dfs7/swaruplab/smorabit/collab/woodlab/reinstatement_2022/DEGs/data/celltype_Reinstatement_vs_WT_DEGs.csv'
+outdir='/dfs7/swaruplab/smorabit/collab/woodlab/reinstatement_2022/DEGs/figures/'$name
+mkdir $outdir
+
+# setup other variables for plotting script
+seurat="/dfs7/swaruplab/smorabit/collab/woodlab/reinstatement_2022/data/Reinstatement_2022_seurat.rds"
+cluster="cell_type"
+nlabel_volcano=10
+volcano_color1="seagreen"
+volcano_color2="darkorchid3"
+ngenes_enrichr=100
+nterms=20
+
+# launch R script:
+Rscript --vanilla /dfs7/swaruplab/smorabit/collab/woodlab/cocaine_mouse_2021/Nurr2c_vs_GFP/bin/parallel_DEG_plotting.R \
+  --infile $infile \
+  --outdir $outdir \
+  --name $name \
+  --seurat $seurat \
+  --cluster $cluster \
+  --nlabel-volcano $nlabel_volcano \
+  --volcano-color1 $volcano_color1 \
+  --volcano-color2 $volcano_color2 \
+  --ngenes-enrichr $ngenes_enrichr \
+  --nterms-enrichr $nterms
+
+
+
+
+name="cluster_Reinstatement_vs_WT"
+infile='/dfs7/swaruplab/smorabit/collab/woodlab/reinstatement_2022/DEGs/data/cluster_Reinstatement_vs_WT_DEGs.csv'
+outdir='/dfs7/swaruplab/smorabit/collab/woodlab/reinstatement_2022/DEGs/figures/'$name
+mkdir $outdir
+
+# setup other variables for plotting script
+seurat="/dfs7/swaruplab/smorabit/collab/woodlab/reinstatement_2022/data/Reinstatement_2022_seurat.rds"
+cluster="annotation"
+nlabel_volcano=10
+volcano_color1="seagreen"
+volcano_color2="darkorchid3"
+ngenes_enrichr=100
+nterms=20
+
+# launch R script:
+Rscript --vanilla /dfs7/swaruplab/smorabit/collab/woodlab/cocaine_mouse_2021/Nurr2c_vs_GFP/bin/parallel_DEG_plotting.R \
+  --infile $infile \
+  --outdir $outdir \
+  --name $name \
+  --seurat $seurat \
+  --cluster $cluster \
+  --nlabel-volcano $nlabel_volcano \
+  --volcano-color1 $volcano_color1 \
+  --volcano-color2 $volcano_color2 \
+  --ngenes-enrichr $ngenes_enrichr \
+  --nterms-enrichr $nterms
